@@ -1,0 +1,149 @@
+---
+layout:     post
+title:      "VSCode安装与使用"
+subtitle:   " \"Coding Make Me Happy!\""
+date:       2020-03-25 22:00:00
+author:     "Pallu"
+header-img: "img/post-bg-2015.jpg"
+tags:
+    - 工具
+    - VScode
+---
+
+
+<!-- TOC -->
+
+- [VSCode安装与使用](#vscode安装与使用)
+    - [Visual Studio Code安装和卸载](#visual-studio-code安装和卸载)
+    - [VSCode中Opencv库函数无法识别问题](#vscode中opencv库函数无法识别问题)
+    - [Pylint插件无法自动识别三方库内的函数](#pylint插件无法自动识别三方库内的函数)
+    - [Pylint忽略某些特定警告](#pylint忽略某些特定警告)
+    - [VSCode 使用SSH远程操作](#vscode-使用ssh远程操作)
+        - [安装SSH](#安装ssh)
+        - [配置SSH连接](#配置ssh连接)
+        - [VSCode连接远程机器](#vscode连接远程机器)
+        - [注意事项：](#注意事项)
+
+<!-- /TOC -->
+
+
+# VSCode安装与使用
+
+## Visual Studio Code安装和卸载
+
+```
+sudo apt-get install code
+sudo apt-get remove --purge code
+```
+
+## VSCode中Opencv库函数无法识别问题
+1. 安装opencv
+```
+pip install opencv-contrib-python
+```
+2. 在site-package中修改cv2的__init__.py文件
+修改__init__.py文件，例如你安装了annaconda，那么就是‪xxx\Anaconda3\Lib\site-packages\cv2\__init__.py文件，将原来的代码注释掉(删掉也行)，更改为：
+```
+import sys
+import os
+import importlib
+os.environ["PATH"] += os.pathsep + os.path.dirname(os.path.realpath(__file__))
+from .cv2 import *
+globals().update(importlib.import_module('cv2.cv2').__dict__)
+```
+3. 重启软件
+
+## Pylint插件无法自动识别三方库内的函数
+1. 在home目录里面生成一个.pylintrc文件
+```
+pylint --generate-rcfile > .pylintrc
+```
+2. 修改.pylintrc文件的对应字段
+```
+# List of members which are set dynamically and missed by pylint inference
+# system, and so shouldn't trigger E1101 when accessed. Python regular
+# expressions are accepted.
+generated-members=numpy.*,torch.*
+```
+> 或者使用Pip直接安装whl包，也可尝试解决
+[Whl包下载地址](https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv)
+
+## Pylint忽略某些特定警告
+1. VSCode下,Ctrl+Shift+P打开搜索, 搜索setting.json文件,在其中增添字段python.linting.pylintArgs
+```
+{
+    "python.pythonPath": "/home/shiluo/miniconda/envs/opencv_py37/bin/python",
+    "python.linting.pylintArgs":[
+        "--disable-msg=E1101, E1102"
+    ]
+}
+```
+2. pylint的错误码可以通过命令查找
+```
+pylint --list-msgs
+```
+> Conda安装包失败的情形下，可以换用Pip试一下
+
+
+## VSCode 使用SSH远程操作
+
+### 安装SSH
+- 使用SSH进行连接，客户端需要安装SSH Client，服务端需要安装SSH Server
+    - Win10自带SSH Client（Win7需要自己安装openSSH，最好使用Git中自带的SSH）
+    - 远程服务器需要安装SSH Server，Ubuntu安装命令
+    ```
+    sudo apt-get install openssh-server
+    ```
+- 安装最新版本VSCode（新版本才支持Remote SSH）
+- 安装VSCode扩展程序
+    - Remote-SSH
+    - Remote-Containers
+    - Remote-WSL
+
+### 配置SSH连接
+- 生成SSH密钥
+
+VSCode需要使用基于SSH密钥的身份验证才能连接到主机，Windows下公钥一般存储在：
+```
+C:\Users\用户名\ .ssh\id_rsa.pub
+```
+检查相应位置看是否已有SSH密钥，如果没有则打开命令提示符使用下面命令生成：
+```
+ssh-keygen -t rsa -b 4096
+```
+- 把上述文件夹中生成的公钥（id_rsa.pub）添加到远程机器
+
+首先将id_rsa.pub文件拷贝到远程服务器用户主目录下，然后运行一下命令
+```
+mkdir -p ~/.ssh   #创建.ssh目录
+chmod 700 ~/.ssh  #设置.ssh目录权限，仅供当前用户读、写、可执行，不能随意设置为777
+cat ~/id_rsa.pub >> ~/.ssh/authorized_keys # 创建authorized_keys
+chmod 600 ~/.ssh/authorized_keys  # 设置authorized_keys权限
+rm -f ~/id_rsa.pub # 删除id_rsa.pub
+```
+
+### VSCode连接远程机器
+
+- 按F1弹出VSCode的命令选项板
+
+- 输入Remote-SSH: Connect to Host，回车
+
+- 选择Configure SSH Hosts
+
+- 配置config文件，配置信息如下
+```
+Host rcf-pytorch
+    HostName 172.17.11.72
+    Port 50865
+    User root
+```
+
+***
+### 注意事项：
+
+> -  VSCode下，按F1，搜索“Remote-SSH Settings”，配置：The absolute file path to a custom SSH config file，否则会出现“bad user or permission error”
+> -  无法调试问题：需要重新安装基于当前远程SSH连接的VSCode扩展，并选择远程服务器上面的python解释器
+> -  最好使用免安装便携版VSCode
+> -  VSCode下，按F1，搜索“Remote-SSH Settings”，设置SSH路径
+
+
