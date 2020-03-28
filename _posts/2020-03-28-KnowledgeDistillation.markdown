@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      "KnowledgeDistillation"
-subtitle:   " \"Coding Make Me Happy!\""
+title:      "Knowledge Distillation"
+subtitle:   
 date:       2020-03-27 12:00:00
 author:     "Pallu"
 header-img: "img/post-bg-2015.jpg"
@@ -10,10 +10,41 @@ tags:
     - KD
 ---
 
-## 前置信息
-下面是有关知识蒸馏论文的阅读笔记，本文主要着重于知识蒸馏相关内容的讲述。讲述的内容也主要着重于知识蒸馏相关的理解与总结，目的是让大家对于知识蒸馏能够有一个整体粗略的了解与把握，从而，后续如果各自项目中需要或想要尝试，能够快速的入手。
+<head>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+            inlineMath: [['$','$']]
+            }
+        });
+    </script>
+</head>
 
-对于一些网络实现的细节，具体请参考对应论文。其中，有一些是我个人的理解与总结，若有理解或表述不当的，请斧正。
+<!-- TOC -->
+
+- [前置信息](#前置信息)
+    - [知识蒸馏](#知识蒸馏)
+    - [知识分类](#知识分类)
+- [论文阅读](#论文阅读)
+    - [[1] 2014_NIPS_Distilling the Knowledge in a Neural Network](#1-2014_nips_distilling-the-knowledge-in-a-neural-network)
+    - [[2] 2015_ICLR_FitNets Hints for thin deep nets](#2-2015_iclr_fitnets-hints-for-thin-deep-nets)
+    - [[3] 2017_ICLR_Improving the Performance of Convolutional Neural Networks via Attention Transfer](#3-2017_iclr_improving-the-performance-of-convolutional-neural-networks-via-attention-transfer)
+    - [[4] 2017_ECCV_Like What You Like Knowledge Distill via Neuron Selectivity Transfer](#4-2017_eccv_like-what-you-like-knowledge-distill-via-neuron-selectivity-transfer)
+    - [[5] 2018_ICLR_Training Shallow and Thin Networks for Acceleration via Knowledge Distillation with Conditional Adversarial Networks](#5-2018_iclr_training-shallow-and-thin-networks-for-acceleration-via-knowledge-distillation-with-conditional-adversarial-networks)
+    - [[6] 2019_AAAI_Multi-Model Ensemble via Adversarial Learning](#6-2019_aaai_multi-model-ensemble-via-adversarial-learning)
+    - [[7] 2019_Arxiv_Improved Knowledge Distillation via Teacher Assistant：Bridging the Gap Between Student and Teacher](#7-2019_arxiv_improved-knowledge-distillation-via-teacher-assistantbridging-the-gap-between-student-and-teacher)
+    - [[8] 2019_ICCV_Learning Lightweight Lane Detection CNNs by Self Attention Distillation](#8-2019_iccv_learning-lightweight-lane-detection-cnns-by-self-attention-distillation)
+    - [[10] 2017_CVPR_A Gift from Knowledge Distillation Fast Optimization, Network Minimization and Transfer Learning](#10-2017_cvpr_a-gift-from-knowledge-distillation-fast-optimization-network-minimization-and-transfer-learning)
+    - [[11] 2018_ECCV_Self-supervised knowledge distillation using singular value decomposition](#11-2018_eccv_self-supervised-knowledge-distillation-using-singular-value-decomposition)
+    - [[12] 2019_BMVC_Graph-based Knowledge Distillation by Multi-head Attention Network](#12-2019_bmvc_graph-based-knowledge-distillation-by-multi-head-attention-network)
+
+<!-- /TOC -->
+
+
+## 前置信息
+下面是有关知识蒸馏论文的阅读笔记。其中，很多是我个人的理解与总结，若有理解或表述不当的，请斧正。
 
 根据之前项目中的几次尝试，知识蒸馏主要适合应用于图像分类任务，对于硬性的定量指标来说有一定的提升，但是对于于图像生成和分割任务来讲，从目视效果来看，提升的不是很明显。
 
@@ -50,7 +81,7 @@ tags:
 
 <img src="https://shiluooulihs.github.io/img/in-post/kd/1.png" width=200 height=50 align=center/>
 
-其中，在计算与T网络输出的Soften Label之间的交叉熵损失：$L_{soft}$时，作者对SoftMax函数做了一些小改变，如下所示，当T等于1时，就是正常的SoftMax函数：
+其中，在计算与T网络输出的Soften Label之间的交叉熵损失：$L_{soft}$ 时，作者对SoftMax函数做了一些小改变，如下所示，当T等于1时，就是正常的SoftMax函数：
 
 <img src="https://shiluooulihs.github.io/img/in-post/kd/0.png" width=800 align=center/>
 
@@ -186,9 +217,11 @@ tags:
 $$
 G_{sum}(A_m)=\sum_{i=1}^{C_m}|A_{mi}|
 $$
+
 $$
 G_{sum}^p(A_m)=\sum_{i=1}^{C_m}|A_{mi}|^p
 $$
+
 $$
 G_{max}^p(A_m)=max_{i=1,C_m}|A_{mi}|^p
 $$
