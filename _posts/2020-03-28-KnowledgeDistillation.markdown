@@ -4,7 +4,7 @@ title:      "KnowledgeDistillation"
 subtitle:   " \"Coding Make Me Happy!\""
 date:       2020-03-27 12:00:00
 author:     "Pallu"
-header-img: "https://shiluooulihs.github.io/img/post-bg-2015.jpg"
+header-img: "img/post-bg-2015.jpg"
 tags:
     - DeepLearning
     - KD
