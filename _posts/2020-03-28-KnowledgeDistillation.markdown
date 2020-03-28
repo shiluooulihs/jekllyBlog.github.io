@@ -85,7 +85,7 @@ tags:
 
 ![avatar](https://shiluooulihs.github.io/img/in-post/kd/0.png)
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/00.png" width=800 align=center/>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/00.png)
 
 为什么使用Soften Label的交叉熵损失有助于S网络的学习，刚才用不严谨的类比说明了一下，下面从网络本身学习的角度来详细解释一下（贴至知乎问答，需要详细了解的可参考： https://www.zhihu.com/question/50519680/answer/136363665）
 > **Knowledge Distill是一种简单地弥补分类问题监督信号不足的办法**。
@@ -104,22 +104,22 @@ tags:
 
 论文[2]中，只选取了T网络中间的某一层：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/2.png" align=center/>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/2.png)
 
 中间网络层的Loss计算如下：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/3.png" align=center/>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/3.png)
 
 主要使用T网络和S网络中间隐藏层输出Feature Maps之间的L2损失，若两者的Feature Maps维度不匹配，则通过Regressor Function（一层卷积层，对应KernelSize和个数经过精心设计，以保证S网络Feature Maps经过它，维度与T网络输出Feature Maps保持一致），来解决T网络与S网络中间层Feature Maps不匹配的问题
 
 算法[2]整体的S网络训练可以分为两个Stage：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/5.png" align=center/>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/5.png)
 
 - 第一步，使用中间网络层Loss，利用T网络中截止到所选取的中间层为止的子网络，来监督训练S网络中截止到对应所选取的中间层的子网络
 - 在上步预训练基础上，使用KD Loss（即论文[1]中的带有Soften Label的交叉熵损失）训练整个S网络
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/4.png" align=center/>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/4.png)
 
 <div STYLE="page-break-after:always;"></div>
 ### [3] 2017_ICLR_Improving the Performance of Convolutional Neural Networks via Attention Transfer
@@ -129,19 +129,19 @@ tags:
 从Feature Maps提取Attention Map方法，[3]给出的三种方式:
 其中A表示中间隐藏层输出的Feature Maps
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/6.png" align=center/>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/6.png)
 
 下面是在某一人脸识别网络中，使用第一种方式得到的不同Level下的Attention Maps的示意图：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/7.png" align=center/>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/7.png)
 
 最终，[3]用T网络Attention Map来监督训练S网络的Attention Map的Loss函数计算如下：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/8.png" align=center/>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/8.png)
 
 算法[3] 整体进行知识蒸馏训练的框架如下：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/9.png" align=center/>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/9.png)
 
 算法[3]在计算Attention Transfer Loss时，需要保证T网络和S网络的Attention Map空间尺度一样，若不一致，则将S网络的Attention Map通过缩放将其与T网络对齐。
 算法[3]除了提出基于Feature Maps提取出Attention Map方法外，也提出了基于梯度计算Attention Map方法，但是效果并未有太大改善，有兴趣的可以具体参考原文。
@@ -150,15 +150,15 @@ tags:
 ### [4] 2017_ECCV_Like What You Like Knowledge Distill via Neuron Selectivity Transfer
 论文[4] 中T网络，同样基于网络中间层输出的Feature Maps是来对S网络进行监督训练，与[2][3]相比，[4]将T网络和S网络对应层输出的两Feature Maps看作是两个分布，利用MMD Loss加以约束，使得两分布相匹配，即S网络输出的Feature Maps对应分布与T网络相一致。
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/10.png" align=center/>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/10.png)
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/11.png" align=center/>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/11.png)
 
 <div STYLE="page-break-after:always;"></div>
 ### [5] 2018_ICLR_Training Shallow and Thin Networks for Acceleration via Knowledge Distillation with Conditional Adversarial Networks
 论文[5] 在论文[1]的基础上，引入GAN的思想，其想要通过网络来学习一种更有效的Loss函数，而不是[1]中所设计的$L_{soft}$，如下图所示：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/12.png" width=400, align=center/>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/12.png" width=400, align=center/>
 
 根据作者所讲述，引入GAN损失，有以下三个优点：
 1. 通过以往的论文可知，通过GAN可以学习一种更有效的Loss；
@@ -166,9 +166,9 @@ tags:
 3. 引入GAN之后，通过它可以学习到T网络输出Soft Label各个类别相似关系，从而指导S网络学习这种相似关系，而不是针对某一个样本，S输出Label必须与T网络输出保存一致，每个类别固定的是多少多少的概率值。从而让S网络在有限的网络结构下，更容易学习。
 
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/13.png" width=400 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/13.png)
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/14.png" width=400 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/14.png)
 
 <div STYLE="page-break-after:always;"></div>
 ### [6] 2019_AAAI_Multi-Model Ensemble via Adversarial Learning
@@ -176,31 +176,31 @@ tags:
 
 论文[6] 引入了Multi-Model Ensemble和GAN，整体的网络训练架构如下：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/15.png" align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/15.png)
 
 1. 训练多个T网络，在训练S时，每一次迭代，随机从预训练的多个T网络中选择一个，用于指导S网络；
 2. 除了使用T网络最后一层的Soft Label信息以外(最后一层的Loss计算时，论文实验使用了L1/L2/Cross-Entropy,最终发现还是Cross-Entropy Loss最好)，还选取了T网络中间中间输出(Feature Maps)用于指导S网络训练。为了便于求取中间层Loss，会将T/S网络的中间输出通过Adptive Pooling进行处理，使之大小一样。
 3. 中间层的Loss使用了两种：Similarity Loss(论文未说明到底使用了哪种？) 和 GAN Loss
 4. GAN Loss求取时，判别网络输入使用了T/S网络中间层输出的Concate，主体网络使用了3层全连接层
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/16.png" width=400 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/16.png)
 
 <div STYLE="page-break-after:always;"></div>
 ### [7] 2019_Arxiv_Improved Knowledge Distillation via Teacher Assistant：Bridging the Gap Between Student and Teacher
 
 论文[7]实验并分析了T网络与S网络之间学习能力差异程度对于知识蒸馏的影响（具体如何实现知识蒸馏，仍然是基于论文[1]）。如下图所示：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/17.png" width=400 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/17.png)
 
 论文[7]分别针对CIFAR-10和CIFAR-100两个数据集，就图像分类问题做了一个实验：预先固定S网络的大小（比如只有两层卷积层），随着不断增大T网络的结构（图中的横坐标4/6/8/10并不代表具体的拥有的卷积层数，而是根据网络的参数量或，虚化的一个成比例的数字，用于表现网络的具体学习能力的大小），看T网络对S网络的提升分别有多少？
 
 从图中可以分析出3个因素，一起对网络的训练造成影响：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/18.png" width=400 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/18.png)
 
 因此，论文[7]通过上述分析，引入了一个助手网络TA（网络结构或学习能力介于T和S之间），先利用T对TA进行知识蒸馏；然后再用TA对S进行知识蒸馏。
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/19.png" width=400 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/19.png)
 
 虽然TA的学习能力弱于T，导致降低了Factor 1的正面影响，但是也减轻了Factor 2、3的负面影响。最终论文[7]通过实验验证了，引入TA（不管是何大小的学习能力的TA，只要介于T与S之间），利大于弊。
 
@@ -210,7 +210,7 @@ tags:
 论文[8]基于论文[3],提出了自监督的知识蒸馏方法，以用于车道线检测。[8]认为，在网络训练过程中，靠前的网络层可以从靠后的网络层输出中，蒸馏出有用的知识，以监督自己的训练。
 网络的整体结构如下：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/20.png" align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/20.png)
 
 所谓的“知识”同样使用了论文[3]中的Attention Map，其计算方法与[3]一样，使用以下三种方法：
 
@@ -229,13 +229,13 @@ $$
 
 $A_m$ 为网络的第m个网络层输出的Feature Maps，$A_{mi}$为对应Feature Maps中的第i个channel；最终论文选取使用$G_{sum}^2(A_m)$用来计算Attention Map。
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/21.png" width=400 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/21.png)
 
 其中，$\Psi(.)=\Phi(B(G_{sum}^2(.)))$，B为双线性插值函数，保证网络前后网络层输出的Feature Maps空间分辨率一致；$\Phi$为归一化函数，保证最终的Attention Map和为一。
 
 最终，网络的总体Loss计算如下:
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/22.png" width=400 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/22.png)
 
 $L_{seg}$为标准的交叉熵损失；$L_{IoU}=1-\frac{N_p}{N_p+N_g-N_o}$,$N_p$为网络探测出车道线边缘像素点个数，$N_g$为GT中车道线边缘像素点个数，$N_o$为两者交叉区域包含像素点个数；$L_{exist}$为是否存在车道线的Binnary Cross Entropy
 
@@ -250,13 +250,13 @@ $L_{seg}$为标准的交叉熵损失；$L_{IoU}=1-\frac{N_p}{N_p+N_g-N_o}$,$N_p$
 1. Pixel-Wise Distillation
 可以将语义分割任务看作为：针对一幅图像中每个像素点，独立进行多分类的任务。所以，可以将原有论文[1]中的知识蒸馏方法直接迁移过来，从而得到Pixel尺度的Loss函数：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/23.png" width=400 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/23.png)
 
 2. Pair-Wise Distillation
 计算T/S网格输出Feature Maps之间，Spatial上对应Pair相似度，之间的差异，如下：
 > 在这里，论文使用的是网络在输出最终分割结果前的上一层网络输出的Feature Maps（即网络倒数第二层卷积层输出Feature Maps）
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/24.png" width=400 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/24.png)
 
 3. Holistic-Wise Distillation
 引入GAN网络，整体上保证T/S网络输出的相似。
@@ -264,7 +264,7 @@ $L_{seg}$为标准的交叉熵损失；$L_{IoU}=1-\frac{N_p}{N_p+N_g-N_o}$,$N_p$
 
 最终，网络的整体结构如下：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/25.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/25.png)
 
 最终，论文网络训练的整体Loss是上述三种Loss，加上原有分割的多分类交叉熵损失。
 
@@ -285,17 +285,17 @@ $L_{seg}$为标准的交叉熵损失；$L_{IoU}=1-\frac{N_p}{N_p+N_g-N_o}$,$N_p$
 
 所以，类比人类的学习，老师在教授某一类问题的求解时，往往是想要学生学会针对某类问题该如何解答时：求解问题的求解过程。论文将这种求解过程表示为前后某两个卷积层输出Feature Maps之间的内积。具体计算如下图所示：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/26.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/26.png)
 
 > FSP计算是要保证前后卷积层输出的Feature Maps空间尺寸一致，若不一致，可用最大池化保证两者一致
 
 利用T网络监督训练S网络时，就直接使用T/S网络对应FSP矩阵之间的L2损失：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/27.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/27.png)
 
 最终，知识蒸馏的整体训练框架如下：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/28.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/28.png)
 
 > 在这里论文未标明当T/S网络对应FSP矩阵维度不一致该如何处理，可能论文本身这里使用深度不一的残差网络进行知识蒸馏，在选取计算FSP时，默认考虑保证了对应FSP维度一致的问题？
 
@@ -314,41 +314,41 @@ $L_{seg}$为标准的交叉熵损失；$L_{IoU}=1-\frac{N_p}{N_p+N_g-N_o}$,$N_p$
 
 论文整体的框架如下：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/29.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/29.png)
 
 所以，论文[11]主要创新就在于如何使用图中的Distillation Module获取所要“知识”：DFV，具体如下图所示：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/30.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/30.png)
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/31.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/31.png)
 
 - 第一步，使用SVD将Feature Maps进行奇异值分解，并按照左奇异向量（Feature Maps中各个通道各自的特征信息），右奇异向量（Feature Maps各个通道之间的Global Information），奇异值（各个奇异向量对应的重要度）的含义，在算法中只使用了右奇异向量和奇异值。为了进一步降低计算复杂度，论文根据奇异值，只挑选的前k个奇异值与其对应的右奇异向量；
 - 对上一步所得到的$\Sigma$和$V$进行归一化后处理。原因有以下两点。
     - 奇异值分解时，所得到的奇异向量是按照奇异值大小进行对应排序的，因此当两个奇异向量对应Energy相似时，在T网络中的分解得到特征向量和S网络中的特征向量可能顺序会有所不同；
     - 奇异向量的中元素值为$[-1, 1]$，完全相反的两个奇异向量其实信息是一致的。
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/32.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/32.png)
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/33.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/33.png)
 
 - 论文首先对T网络分解得到的右奇异向量乘上对应归一化后奇异值，以进行归一后处理；然后，利用向量之间cosine相似度（这里使用绝对值，避免完全相反的向量所计算得到的差异却认为很大），依照T网络的右奇异向量，找到其S网络中对应的右奇异向量，进而使用T网络的奇异值对其进行归一后处理：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/34.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/34.png)
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/35.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/35.png)
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/36.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/36.png)
 
 - 最终，由于前后Feature Maps得到的归一后的右奇异向量彼此之间是相互独立的，所以，在这里计算两者之间相互关系时，使用了向量之间Point-Wist L2距离，如下所示。另一方面，为了去除SVD分解可能引入的噪声，利用RBF核加以抑制。
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/37.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/37.png)
 
 > 可以看出最终得到DFV的维度，与Feature Maps的空间尺寸无关，只与其深度（Channel个数）有关
 
 
 最后，论文通过求取T网络得到的DFV与S网络中对应DFV之间的L2损失，来监督训练S网络。
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/38.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/38.png)
 
 其中，$G$ 为进行知识蒸馏时，所选取计算DFV的个数。
 
@@ -363,13 +363,13 @@ $L_{seg}$为标准的交叉熵损失；$L_{IoU}=1-\frac{N_p}{N_p+N_g-N_o}$,$N_p$
 > 具体内容不在这里展开，有兴趣的可参考论文：“Effective approaches to
 attention-based neural machine translation” 和 “Attention is all you need”
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/39.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/39.png)
 
 论文的整体框架如下：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/40.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/40.png)
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/41.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/41.png)
 
 论文的整体训练可以分为两个阶段：
 - 训练MHGD中的MHA,也是本论文的核心，具体网络结构如图2所示。其训练过程类似于编/解码器的训练，最终在知识蒸馏时只使用了其中的“编码器”，即MHA：用于计算两个Feature Vector Set之间的关系；
@@ -379,21 +379,21 @@ MHA的输入是经过了论文[11]中KD-SVD进行前处理得到的Feature Vecto
 
 >KD-SVD针对每张图输入，处理得到的是k个右奇异向量，论文这里默认得到的是单个向量，论文本身也没有详细说明如何得到？k个向量首位向量组合形成？
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/42.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/42.png)
 
 
 MHAN包含了多个AN,每一个AN结构如下：首先通过全连接层将前后Feature Vector Set的维度匹配一致，方便后续相似度计算；然后计算两个Feature Vector Set之间的相似度similarity map，计算方式如公式2所示；之后，对similarity map进行行方向上的softmax，保证similarity map中的每一行和为1；最终将多个AN输出的similarity map concat一起，组合成$G$.
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/43.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/43.png)
 
 因为，得到$G$是有网络可学习参数的，所以预先需要对这些层的参数进行学习（类比于编/解码器）。为了学习这些参数，后面再接一个estimator：尝试可以通过$G$和$V^F$,恢复得到$V^B$。
 
 estimator的结构如下：
-<img src="https://shiluooulihs.github.io/img/in-post/kd/44.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/44.png)
 
 最终，MHA训练的损失使用了向量间的Cosine相似度，如下所示：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/45.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/45.png)
 
 网络最终进行知识蒸馏的训练如下：
 
@@ -401,6 +401,6 @@ estimator的结构如下：
 
 - 与论文[11]相似，整体训练过程分为2个Stage
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/46.png" width=600 align=center>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/46.png)
 
 <div STYLE="page-break-after:always;"></div>
