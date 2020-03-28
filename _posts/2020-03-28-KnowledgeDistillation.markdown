@@ -79,11 +79,11 @@ tags:
 
 在S网络进行训练时：除了原有的交叉熵损失之外，还需要加上与T网络输出的Soften Label之间的交叉熵损失。
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/1.png" width=200 height=50 align=center/>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/1.png)
 
 其中，在计算与T网络输出的Soften Label之间的交叉熵损失：$L_{soft}$ 时，作者对SoftMax函数做了一些小改变，如下所示，当T等于1时，就是正常的SoftMax函数：
 
-<img src="https://shiluooulihs.github.io/img/in-post/kd/0.png" width=800 align=center/>
+![avatar](https://shiluooulihs.github.io/img/in-post/kd/0.png)
 
 <img src="https://shiluooulihs.github.io/img/in-post/kd/00.png" width=800 align=center/>
 
